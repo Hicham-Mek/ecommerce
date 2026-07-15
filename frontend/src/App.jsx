@@ -1,26 +1,13 @@
 
-
-import { useEffect, useState } from "react";
-import api from "./api/axios";
+import { BrowserRouter } from 'react-router-dom';
+import AppRoutes from './routes/AppRoutes';
 
 function App() {
-    const [message, setMessage] = useState("");
-
-    useEffect(() => {
-        api.get("/test")
-            .then((response) => {
-                setMessage(response.data.message);
-            })
-            .catch((error) => {
-                console.error(error);
-            });
-    }, []);
-
-    return (
-        <div className="min-h-screen flex items-center justify-center">
-            <h1 className="text-3xl font-bold">{message}</h1>
-        </div>
-    );
+  return (
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
+  );
 }
 
 export default App;
