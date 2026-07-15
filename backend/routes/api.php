@@ -11,5 +11,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/user', [AuthController::class, 'user']);
 
+
 Route::apiResource('categories', CategoryController::class);
 Route::apiResource('products', ProductController::class);
+Route::get('/products/{product}', [ProductController::class, 'show']);
