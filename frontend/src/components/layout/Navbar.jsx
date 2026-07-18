@@ -1,33 +1,48 @@
-import React from 'react';
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Navbar = () => {
-  return  (
-        <nav className="bg-white shadow">
-            <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+  const { user, logout } = useAuth();
 
-                <Link
-                    to="/"
-                    className="text-xl font-bold text-blue-600"
-                >
-                    E-Shop
-                </Link>
+  const handleLogout = async () => {
+    await logout();
+  };
 
-                <div className="flex gap-6">
+  return (
+    <nav className="bg-white shadow">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <Link to="/" className="text-xl font-bold text-blue-600">
+          E-Shop
+        </Link>
 
-                    <Link to="/">Home</Link>
+        <div className="flex gap-6 items-center">
+          <Link to="/">Home</Link>
 
-                    <Link to="/products">Products</Link>
+          <Link to="/products">Products</Link>
+          <Link to="/cart">Cart</Link>
 
-                    <Link to="/login">Login</Link>
+          {user ? (
+            <>
+              <span>Welcome, {user.name}</span>
 
-                    <Link to="/register">Register</Link>
+              <button
+                onClick={handleLogout}
+                className="text-red-600 hover:text-red-800"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
 
-                </div>
-
-            </div>
-        </nav>
-    );
+              <Link to="/register">Register</Link>
+            </>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
 };
 
 export default Navbar;

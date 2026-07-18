@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 
+
 #[Fillable([
     'category_id',
     'name',
@@ -25,4 +26,8 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
+    public function cartItems()
+{
+    return $this->hasMany(CartItem::class);
+}
 }

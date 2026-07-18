@@ -1,7 +1,56 @@
-import React from 'react';
+import { useCart } from "../context/CartContext";
 
 const Cart = () => {
-  return <div>Cart</div>;
+  const { cart, updateQuantity, removeItem, clearCart } = useCart();
+
+  if (!cart || !cart.items.length) return <h2>Your cart is empty.</h2>;
+
+  return (
+    <div className="max-w-5xl mx-auto py-8">
+      <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
+
+      {cart.items.map((item) => (
+        <div
+          key={item.id}
+          className="border rounded p-4 mb-4 flex justify-between"
+        >
+          <div>
+            <h2>{item.product.name}</h2>
+
+            <p>${item.product.price}</p>
+
+            <p>Qty: {item.quantity}</p>
+          </div>
+
+          <div className="space-x-2">
+            <button onClick={() => updateQuantity(item.id, item.quantity + 1)}>
+              +
+            </button>
+
+            <button
+              onClick={() => {
+                if (item.quantity > 1) {
+                  updateQuantity(item.id, item.quantity - 1);
+                }
+              }}
+              disabled={item.quantity <= 1}
+            >
+              -
+            </button>
+
+            <button onClick={() => removeItem(item.id)}>Remove</button>
+          </div>
+        </div>
+      ))}
+
+      <button
+        onClick={clearCart}
+        className="bg-red-600 text-white px-4 py-2 rounded"
+      >
+        Clear Cart
+      </button>
+    </div>
+  );
 };
 
 export default Cart;

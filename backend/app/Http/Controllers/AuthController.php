@@ -6,6 +6,9 @@ use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+
+
 
 class AuthController extends Controller
 {
@@ -31,20 +34,24 @@ public function login(LoginRequest $request)
         ], 401);
     }
 
-    // $request->session()->regenerate();
+    $request->session()->regenerate();
 
     return response()->json([
         'message' => 'Login successful.',
         'user' => Auth::user(),
     ], 200);
 }
-public function logout()
+public function logout(Request $request)
 {
-    Auth::logout();
+    Auth::guard('web')->logout();
+
+    $request->session()->invalidate();
+
+    $request->session()->regenerateToken();
 
     return response()->json([
         'message' => 'Logout successful.',
-    ], 200);
+    ]);
 }
 public function user()
 {
