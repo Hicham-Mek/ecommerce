@@ -14,7 +14,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/logout', [AuthController::class, 'logout']);
-                Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/user', [AuthController::class, 'user']);
 
 });
 
@@ -41,4 +41,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/orders', [OrderController::class, 'store']);
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/orders/{order}', [OrderController::class, 'show']);
+
+    Route::apiResource('wishlist', \App\Http\Controllers\WishlistController::class)->only(['index', 'store', 'destroy']);
 });

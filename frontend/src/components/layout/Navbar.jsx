@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { useWishlist } from "../../context/WishlistContext";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { wishlist } = useWishlist();
 
   const handleLogout = async () => {
     await logout();
@@ -21,6 +23,7 @@ const Navbar = () => {
           <Link to="/products">Products</Link>
           <Link to="/cart">Cart</Link>
           {user && <Link to="/orders">My Orders</Link>}
+          <Link to="/wishlist">Wishlist ({wishlist.length})</Link>
 
           {user ? (
             <>

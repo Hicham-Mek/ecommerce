@@ -1,9 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
+import { useWishlist } from "../../context/WishlistContext";
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
+  const { wishlist, add, remove } = useWishlist();
+  const wishItem = wishlist.find((item) => item.product_id === product.id);
 
   return (
     <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
@@ -30,6 +33,12 @@ const ProductCard = ({ product }) => {
         className="bg-blue-600 text-white px-4 py-2 rounded"
       >
         Add to Cart
+      </button>
+      <button
+        className="mt-3 text-red-500"
+        onClick={() => (wishItem ? remove(wishItem.id) : add(product.id))}
+      >
+        {wishItem ? "❤️ Remove" : "🤍 Wishlist"}
       </button>
       <Link
         to={`/products/${product.id}`}
