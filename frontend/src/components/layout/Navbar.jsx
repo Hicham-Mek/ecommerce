@@ -20,6 +20,7 @@ const Navbar = () => {
 
           <Link to="/products">Products</Link>
           <Link to="/cart">Cart</Link>
+          {user && <Link to="/orders">My Orders</Link>}
 
           {user ? (
             <>

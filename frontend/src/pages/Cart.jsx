@@ -1,10 +1,23 @@
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import orderService from "../services/orderService";
 
 const Cart = () => {
-  const { cart, updateQuantity, removeItem, clearCart } = useCart();
+  const { cart, updateQuantity, removeItem, clearCart, fetchCart } = useCart();
+  const navigate = useNavigate();
 
   if (!cart || !cart.items.length) return <h2>Your cart is empty.</h2>;
+  const handleCheckout = async () => {
+    try {
+      await orderService.placeOrder();
 
+      fetchCart();
+
+      navigate("/orders");
+    } catch (err) {
+      console.error(err);
+    }
+  };
   return (
     <div className="max-w-5xl mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
@@ -36,6 +49,12 @@ const Cart = () => {
               disabled={item.quantity <= 1}
             >
               -
+            </button>
+            <button
+              onClick={handleCheckout}
+              className="bg-green-600 text-white px-5 py-2 rounded"
+            >
+              Place Order (COD)
             </button>
 
             <button onClick={() => removeItem(item.id)}>Remove</button>
