@@ -11,6 +11,7 @@ use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdminOrderController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 
 
@@ -74,6 +75,9 @@ Route::middleware([
     Route::get('/orders/{order}', [AdminOrderController::class, 'show']);
     Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus']);
     // users
+    Route::get('/users', [AdminUserController::class, 'index']);
+    Route::patch('/users/{user}/role', [AdminUserController::class, 'updateRole']);
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
 
 
 });
