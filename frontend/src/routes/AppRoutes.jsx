@@ -20,6 +20,9 @@ import AdminOrders from "../admin/pages/Orders";
 import AdminUsers from "../admin/pages/Users";
 import CreateProduct from "../admin/pages/CreateProduct";
 import EditProduct from "../admin/pages/EditProduct";
+import CreateCategory from "../admin/pages/CreateCategory";
+import EditCategory from "../admin/pages/EditCategory";
+import OrderDetailsAdmin from "../admin/pages/OrderDetails";
 const AppRoutes = () => {
   return (
     <Routes>
@@ -47,9 +50,14 @@ const AppRoutes = () => {
         <Route path="products" element={<AdminProducts />} />
         <Route path="products/create" element={<CreateProduct />} />
         <Route path="products/:id/edit" element={<EditProduct />} />
+
         <Route path="categories" element={<AdminCategories />} />
+        <Route path="categories/create" element={<CreateCategory />} />
+        <Route path="categories/:id/edit" element={<EditCategory />} />
 
         <Route path="orders" element={<AdminOrders />} />
+        <Route path="orders/:id" element={<OrderDetails />} />
+
         <Route path="users" element={<AdminUsers />} />
       </Route>
     </Routes>

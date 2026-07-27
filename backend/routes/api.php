@@ -10,6 +10,8 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdminOrderController;
+
 
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -66,7 +68,12 @@ Route::middleware([
     // products
     Route::apiResource('products', ProductController::class);
     // categories
+    Route::apiResource('categories', CategoryController::class);
     // orders
+    Route::get('/orders', [AdminOrderController::class, 'index']);
+    Route::get('/orders/{order}', [AdminOrderController::class, 'show']);
+    Route::patch('/orders/{order}/status', [AdminOrderController::class, 'updateStatus']);
     // users
+
 
 });

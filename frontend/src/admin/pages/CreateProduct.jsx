@@ -51,6 +51,7 @@ const CreateProduct = () => {
       const data = new FormData();
 
       Object.entries(form).forEach(([key, value]) => {
+        if (key === "image" && !value) return;
         data.append(key, value);
       });
 
