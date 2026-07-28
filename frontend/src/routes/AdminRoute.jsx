@@ -1,11 +1,12 @@
 import { Navigate } from "react-router-dom";
+import Spinner from "../components/common/Spinner";
 import { useAuth } from "../context/AuthContext";
 
 const AdminRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div className="p-6">Loading...</div>;
+    return <Spinner />;
   }
 
   if (!user) {

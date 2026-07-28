@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
+import Spinner from "../../components/common/Spinner";
 import adminCategoryService from "../../services/adminCategoryService";
 
 const EditCategory = () => {
@@ -49,16 +51,18 @@ const EditCategory = () => {
 
     try {
       await adminCategoryService.updateCategory(id, form);
+      toast.success("Category updated successfully.");
       navigate("/admin/categories");
     } catch (err) {
       console.error(err);
+      toast.error(err.response?.data?.message || "Failed to update category.");
       setError(err.response?.data?.message || "Failed to update category.");
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <div>Loading category...</div>;
+  if (loading) return <Spinner />;
 
   return (
     <form

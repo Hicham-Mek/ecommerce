@@ -1,7 +1,8 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import orderService from "../services/orderService";
 import { Link } from "react-router-dom";
+import EmptyState from "../components/common/EmptyState";
+import orderService from "../services/orderService";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -15,8 +16,9 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  if (!orders.length)
-    return <p className="text-center mt-10">You have no orders yet.</p>;
+  if (!orders.length) {
+    return <EmptyState title="You have no orders yet" />;
+  }
   return (
     <div className="max-w-5xl mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">My Orders</h1>

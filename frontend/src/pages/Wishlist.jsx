@@ -1,12 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import EmptyState from "../components/common/EmptyState";
 import { useWishlist } from "../context/WishlistContext";
 
 const Wishlist = () => {
   const { wishlist, remove } = useWishlist();
 
-  if (!wishlist.length)
-    return <div className="text-center mt-10">Wishlist is empty.</div>;
+  if (!wishlist.length) {
+    return <EmptyState title="Wishlist is empty" />;
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6">

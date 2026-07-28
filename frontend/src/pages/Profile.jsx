@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Spinner from "../components/common/Spinner";
 import profileService from "../services/profileService";
 
 const Profile = () => {
@@ -81,7 +82,7 @@ const Profile = () => {
   };
 
   if (loading) {
-    return <div className="text-center mt-10">Loading...</div>;
+    return <Spinner />;
   }
 
   return (

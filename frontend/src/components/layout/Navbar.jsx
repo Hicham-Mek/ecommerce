@@ -1,3 +1,11 @@
+import {
+  ShoppingCart,
+  Heart,
+  Package,
+  LogOut,
+  LogIn,
+  UserPlus,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useWishlist } from "../../context/WishlistContext";
@@ -20,10 +28,26 @@ const Navbar = () => {
         <div className="flex gap-6 items-center">
           <Link to="/">Home</Link>
 
-          <Link to="/products">Products</Link>
-          <Link to="/cart">Cart</Link>
-          {user && <Link to="/orders">My Orders</Link>}
-          <Link to="/wishlist">Wishlist ({wishlist.length})</Link>
+          <Link to="/products" className="inline-flex items-center gap-1">
+            <Package size={16} />
+            Products
+          </Link>
+          {user && (
+            <>
+              <Link to="/cart" className="inline-flex items-center gap-1">
+                <ShoppingCart size={16} />
+                Cart
+              </Link>
+              <Link to="/orders" className="inline-flex items-center gap-1">
+                <Package size={16} />
+                Orders
+              </Link>
+              <Link to="/wishlist" className="inline-flex items-center gap-1">
+                <Heart size={16} />
+                Wishlist ({wishlist.length})
+              </Link>
+            </>
+          )}
 
           {user ? (
             <>
@@ -31,16 +55,23 @@ const Navbar = () => {
 
               <button
                 onClick={handleLogout}
-                className="text-red-600 hover:text-red-800"
+                className="inline-flex items-center gap-1 text-red-600 hover:text-red-800"
               >
+                <LogOut size={16} />
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
+              <Link to="/login" className="inline-flex items-center gap-1">
+                <LogIn size={16} />
+                Login
+              </Link>
 
-              <Link to="/register">Register</Link>
+              <Link to="/register" className="inline-flex items-center gap-1">
+                <UserPlus size={16} />
+                Register
+              </Link>
             </>
           )}
         </div>

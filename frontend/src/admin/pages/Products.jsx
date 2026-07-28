@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
+import { Edit, Plus, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import Spinner from "../../components/common/Spinner";
 import adminProductService from "../../services/adminProductService";
 
 const Products = () => {
@@ -22,17 +25,47 @@ const Products = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    if (!confirm("Delete this product?")) return;
+    const result = await Swal.fire({
+      title: "Delete product?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded",
+        cancelButton:
+          "bg-gray-500 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded ml-2",
+      },
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await adminProductService.deleteProduct(id);
+      await Swal.fire({
+        title: "Deleted!",
+        text: "The product was removed successfully.",
+        icon: "success",
+        confirmButtonColor: "#2563eb",
+      });
       fetchProducts();
     } catch (error) {
       console.error(error);
+      Swal.fire({
+        title: "Failed",
+        text: error.response?.data?.message || "Unable to delete product.",
+        icon: "error",
+        confirmButtonColor: "#2563eb",
+      });
     }
   };
 
-  if (loading) return <div>Loading products...</div>;
+  if (loading) return <Spinner />;
 
   return (
     <div>
@@ -40,8 +73,9 @@ const Products = () => {
         <h1 className="text-3xl font-bold">Products</h1>
         <Link
           to="/admin/products/create"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="bg-blue-600 text-white px-4 py-2 rounded inline-flex items-center gap-2"
         >
+          <Plus size={16} />
           Add Product
         </Link>
       </div>
@@ -67,14 +101,16 @@ const Products = () => {
                 <td className="p-3 space-x-3">
                   <Link
                     to={`/admin/products/${product.id}/edit`}
-                    className="text-blue-600"
+                    className="inline-flex items-center gap-1 text-blue-600"
                   >
+                    <Edit size={16} />
                     Edit
                   </Link>
                   <button
                     onClick={() => handleDelete(product.id)}
-                    className="text-red-600"
+                    className="inline-flex items-center gap-1 text-red-600"
                   >
+                    <Trash2 size={16} />
                     Delete
                   </button>
                 </td>

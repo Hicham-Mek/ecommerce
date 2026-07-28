@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Spinner from "../../components/common/Spinner";
 import dashboardService from "../../services/adminDashboardService";
 import StatCard from "../components/StatCard";
 import RevenueChart from "../components/RevenueChart";
@@ -37,7 +38,7 @@ const Dashboard = () => {
   }, []);
 
   if (loading) {
-    return <div className="p-6">Loading dashboard...</div>;
+    return <Spinner />;
   }
 
   return (

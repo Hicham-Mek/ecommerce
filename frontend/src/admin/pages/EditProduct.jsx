@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/axios";
+import Spinner from "../../components/common/Spinner";
 import adminProductService from "../../services/adminProductService";
 
 const EditProduct = () => {
@@ -98,9 +100,14 @@ const EditProduct = () => {
       }
 
       await adminProductService.updateProduct(id, data);
+      toast.success("Product updated successfully.");
       navigate("/admin/products");
     } catch (err) {
       console.error(err);
+      toast.error(
+        err.response?.data?.message ||
+          "Failed to update product. Please check the form and try again.",
+      );
       setError(
         err.response?.data?.message ||
           "Failed to update product. Please check the form and try again.",
@@ -117,7 +124,7 @@ const EditProduct = () => {
   }, [preview]);
 
   if (loading) {
-    return <div>Loading product...</div>;
+    return <Spinner />;
   }
 
   return (

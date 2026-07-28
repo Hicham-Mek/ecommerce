@@ -1,7 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import api from "../api/axios";
+import EmptyState from "../components/common/EmptyState";
+import Spinner from "../components/common/Spinner";
 import ProductCard from "../components/product/ProductCard";
+import { useSearchParams } from "react-router-dom";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -9,12 +12,19 @@ const Products = () => {
 
   const [loading, setLoading] = useState(true);
 
+  const [searchParams] = useSearchParams();
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState(
+    () => searchParams.get("category") || "",
+  );
   const [sort, setSort] = useState("latest");
 
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
+
+  useEffect(() => {
+    setSelectedCategory(searchParams.get("category") || "");
+  }, [searchParams]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -56,7 +66,7 @@ const Products = () => {
   }, [search, selectedCategory, sort, currentPage]);
 
   if (loading) {
-    return <h2>Loading products...</h2>;
+    return <Spinner />;
   }
 
   return (
@@ -96,11 +106,15 @@ const Products = () => {
       <div>
         <h1 className="text-3xl font-bold mb-6">Products</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {products.length === 0 ? (
+          <EmptyState title="No products found" />
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
       <div className="flex justify-center items-center gap-4 mt-8">
         <button

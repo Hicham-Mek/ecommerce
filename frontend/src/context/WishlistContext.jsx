@@ -28,13 +28,17 @@ export const WishlistProvider = ({ children }) => {
   }, [user]);
 
   const add = async (productId) => {
+    if (!user) return;
+
     await wishlistService.addToWishlist(productId);
-    fetchWishlist();
+    await fetchWishlist();
   };
 
   const remove = async (wishlistId) => {
+    if (!user) return;
+
     await wishlistService.removeFromWishlist(wishlistId);
-    fetchWishlist();
+    await fetchWishlist();
   };
 
   return (

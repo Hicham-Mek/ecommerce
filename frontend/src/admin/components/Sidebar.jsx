@@ -1,3 +1,4 @@
+import { Menu } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -10,8 +11,13 @@ const Sidebar = () => {
     }`;
 
   return (
-    <aside className="w-64 bg-white border-r min-h-screen p-4 flex flex-col">
-      <div className="text-2xl font-bold text-blue-600 mb-8">Admin Panel</div>
+    <aside className="w-full lg:w-64 bg-white border-r min-h-screen p-4 flex flex-col">
+      <div className="flex items-center justify-between lg:justify-start mb-8">
+        <div className="text-2xl font-bold text-blue-600">Admin Panel</div>
+        <div className="lg:hidden rounded p-2 text-gray-600">
+          <Menu size={20} />
+        </div>
+      </div>
 
       <nav className="space-y-2 flex-1">
         <NavLink to="/admin" end className={linkClass}>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Spinner from "../../components/common/Spinner";
 import adminOrderService from "../../services/adminOrderService";
 
 const OrderDetails = () => {
@@ -52,7 +53,7 @@ const OrderDetails = () => {
   };
 
   if (loading) {
-    return <div>Loading order...</div>;
+    return <Spinner />;
   }
 
   if (!order) {

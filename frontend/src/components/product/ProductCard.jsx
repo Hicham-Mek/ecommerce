@@ -1,12 +1,41 @@
 import React from "react";
+import { Heart, ShoppingCart, Eye } from "lucide-react";
 import { Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
+import { useAuth } from "../../context/AuthContext";
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
   const { wishlist, add, remove } = useWishlist();
+  const { user } = useAuth();
   const wishItem = wishlist.find((item) => item.product_id === product.id);
+
+  const handleAddToCart = async () => {
+    try {
+      await addToCart(product.id);
+      toast.success("Added to cart");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add to cart");
+    }
+  };
+
+  const handleWishlistToggle = async () => {
+    try {
+      if (wishItem) {
+        await remove(wishItem.id);
+        toast.success("Removed from wishlist");
+      } else {
+        await add(product.id);
+        toast.success("Added to wishlist");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Wishlist action failed");
+    }
+  };
 
   return (
     <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
@@ -28,22 +57,29 @@ const ProductCard = ({ product }) => {
         ${Number(product.price).toFixed(2)}
       </p>
 
-      <button
-        onClick={() => addToCart(product.id)}
-        className="bg-blue-600 text-white px-4 py-2 rounded"
-      >
-        Add to Cart
-      </button>
-      <button
-        className="mt-3 text-red-500"
-        onClick={() => (wishItem ? remove(wishItem.id) : add(product.id))}
-      >
-        {wishItem ? "❤️ Remove" : "🤍 Wishlist"}
-      </button>
+      {user && (
+        <div className="flex flex-wrap gap-2 mt-4">
+          <button
+            onClick={handleAddToCart}
+            className=" cursor-pointer inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded"
+          >
+            <ShoppingCart size={16} />
+            Add to Cart
+          </button>
+          <button
+            className=" cursor-pointer inline-flex items-center gap-2 text-red-500"
+            onClick={handleWishlistToggle}
+          >
+            <Heart size={16} fill={wishItem ? "currentColor" : "none"} />
+            {wishItem ? "Remove" : "Wishlist"}
+          </button>
+        </div>
+      )}
       <Link
         to={`/products/${product.id}`}
-        className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        className="inline-flex items-center gap-2 mt-4 bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200"
       >
+        <Eye size={16} />
         View Details
       </Link>
     </div>

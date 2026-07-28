@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Spinner from "../../components/common/Spinner";
 import adminOrderService from "../../services/adminOrderService";
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
 
   const fetchOrders = async () => {
     try {
-      const res = await adminOrderService.getOrders();
+      const res = await adminOrderService.getOrders(page);
       setOrders(res.data.data || res.data);
+      setLastPage(res.data.last_page || 1);
     } catch (error) {
       console.error(error);
     } finally {
@@ -19,7 +23,7 @@ const Orders = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [page]);
 
   const badgeColor = (status) => {
     switch (status) {
@@ -39,7 +43,7 @@ const Orders = () => {
   };
 
   if (loading) {
-    return <div>Loading orders...</div>;
+    return <Spinner />;
   }
 
   return (
@@ -107,6 +111,28 @@ const Orders = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+
+        <span className="font-medium">
+          Page {page} of {lastPage}
+        </span>
+
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, lastPage))}
+          disabled={page === lastPage}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   );

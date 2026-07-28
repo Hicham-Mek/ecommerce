@@ -1,18 +1,24 @@
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import Swal from "sweetalert2";
+import Spinner from "../../components/common/Spinner";
 import adminUserService from "../../services/adminUserService";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
 
   const fetchUsers = async () => {
     try {
       setLoading(true);
 
-      const res = await adminUserService.getUsers(search);
+      const res = await adminUserService.getUsers(search, page);
 
       setUsers(res.data.data || res.data);
+      setLastPage(res.data.last_page || 1);
     } catch (error) {
       console.error(error);
     } finally {
@@ -21,8 +27,12 @@ const Users = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+    setPage(1);
   }, [search]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [search, page]);
 
   const handleRoleChange = async (id, role) => {
     try {
@@ -31,28 +41,48 @@ const Users = () => {
       setUsers((prev) =>
         prev.map((user) => (user.id === id ? { ...user, role } : user)),
       );
+      toast.success("Role updated successfully.");
     } catch (error) {
       console.error(error);
-      alert("Failed to update role.");
+      toast.error("Failed to update role.");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this user?")) return;
+    const result = await Swal.fire({
+      title: "Delete user?",
+      text: "This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete",
+      cancelButtonText: "Cancel",
+      confirmButtonColor: "#dc2626",
+      cancelButtonColor: "#6b7280",
+      buttonsStyling: false,
+      customClass: {
+        confirmButton:
+          "bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded",
+        cancelButton:
+          "bg-gray-500 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded ml-2",
+      },
+    });
+
+    if (!result.isConfirmed) return;
 
     try {
       await adminUserService.deleteUser(id);
 
       setUsers((prev) => prev.filter((user) => user.id !== id));
+      toast.success("User deleted successfully.");
     } catch (error) {
       console.error(error);
 
-      alert(error.response?.data?.message || "Unable to delete user.");
+      toast.error(error.response?.data?.message || "Unable to delete user.");
     }
   };
 
   if (loading) {
-    return <div>Loading users...</div>;
+    return <Spinner />;
   }
 
   return (
@@ -130,6 +160,28 @@ const Users = () => {
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+          disabled={page === 1}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Previous
+        </button>
+
+        <span className="font-medium">
+          Page {page} of {lastPage}
+        </span>
+
+        <button
+          onClick={() => setPage((prev) => Math.min(prev + 1, lastPage))}
+          disabled={page === lastPage}
+          className="px-4 py-2 border rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   );

@@ -1,12 +1,15 @@
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
+import EmptyState from "../components/common/EmptyState";
 import orderService from "../services/orderService";
 
 const Cart = () => {
   const { cart, updateQuantity, removeItem, clearCart, fetchCart } = useCart();
   const navigate = useNavigate();
 
-  if (!cart || !cart.items.length) return <h2>Your cart is empty.</h2>;
+  if (!cart || !cart.items.length) {
+    return <EmptyState title="Your cart is empty" />;
+  }
   const handleCheckout = async () => {
     try {
       await orderService.placeOrder();

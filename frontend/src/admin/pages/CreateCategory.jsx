@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import adminCategoryService from "../../services/adminCategoryService";
 
@@ -25,9 +26,11 @@ const CreateCategory = () => {
 
     try {
       await adminCategoryService.createCategory(form);
+      toast.success("Category created successfully.");
       navigate("/admin/categories");
     } catch (err) {
       console.error(err);
+      toast.error(err.response?.data?.message || "Failed to create category.");
       setError(err.response?.data?.message || "Failed to create category.");
     } finally {
       setLoading(false);

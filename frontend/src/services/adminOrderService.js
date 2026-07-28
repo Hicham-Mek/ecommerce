@@ -1,6 +1,6 @@
 import api from "../api/axios";
 
-const getOrders = () => api.get("/admin/orders");
+const getOrders = (page = 1) => api.get(`/admin/orders?page=${page}`);
 
 const getOrder = (id) => api.get(`/admin/orders/${id}`);
 

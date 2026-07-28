@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import api from "../../api/axios";
 import adminProductService from "../../services/adminProductService";
@@ -56,9 +57,11 @@ const CreateProduct = () => {
       });
 
       await adminProductService.createProduct(data);
+      toast.success("Product created successfully.");
       navigate("/admin/products");
     } catch (err) {
       console.error(err);
+      toast.error(err.response?.data?.message || "Failed to create product.");
       setError(err.response?.data?.message || "Failed to create product.");
     } finally {
       setLoading(false);
