@@ -34,6 +34,16 @@ const Navbar = () => {
           </Link>
           {user && (
             <>
+              {user.role === "admin" && (
+                <Link
+                  to="/admin"
+                  className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-800"
+                >
+                  <Package size={16} />
+                  Admin Dashboard
+                </Link>
+              )}
+
               <Link to="/cart" className="inline-flex items-center gap-1">
                 <ShoppingCart size={16} />
                 Cart

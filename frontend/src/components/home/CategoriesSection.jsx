@@ -33,6 +33,29 @@ const CategoriesSection = () => {
     );
   }
 
+  const categoryImageUrl = (category) => {
+    const localMap = {
+      electronics: "/electronics.jpg",
+      fashion: "/fashion.jpg",
+      gaming: "/gaming.jpg",
+      "home & kitchen": "/home.jpg",
+      beauty: "/beauty.jpg",
+      sports: "/sports.jpg",
+      books: "/books.jpg",
+      accessories: "/accesoires.jpg",
+      baby: "/baby.jpg",
+      grocery: "/grocery.jpg",
+    };
+
+    if (category.image) {
+      return category.image.startsWith("http")
+        ? category.image
+        : `http://localhost:8000/storage/${category.image}`;
+    }
+
+    return localMap[category.name.toLowerCase()] || "/electronics.jpg";
+  };
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-6">
@@ -51,11 +74,7 @@ const CategoriesSection = () => {
             >
               <div className="w-24 h-24 mx-auto mb-4 overflow-hidden rounded-full bg-gray-100">
                 <img
-                  src={
-                    category.image
-                      ? `http://localhost:8000/storage/${category.image}`
-                      : "https://placehold.co/200x200?text=Category"
-                  }
+                  src={categoryImageUrl(category)}
                   alt={category.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition duration-300"
                 />
