@@ -16,17 +16,22 @@ return [
     */
 
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
-
-    'allowed_methods' => ['*'],
+    'paths' => [
+        'api/*',
+        'sanctum/csrf-cookie',
+    ],
 
     'allowed_origins' => [
-        'http://localhost:5173',
+        'https://your-app.vercel.app',
     ],
+
+    'allowed_methods' => ['*'],
+    'allowed_headers' => ['*'],
+
 
     'allowed_origins_patterns' => [],
 
-    'allowed_headers' => ['*'],
+
 
     'exposed_headers' => [],
 
