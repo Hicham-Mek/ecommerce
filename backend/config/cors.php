@@ -22,7 +22,7 @@ return [
     ],
 
     'allowed_origins' => [
-        'https://ecommerce-chi-orcin.vercel.app/',
+        'https://ecommerce-chi-orcin.vercel.app',
     ],
 
     'allowed_methods' => ['*'],
