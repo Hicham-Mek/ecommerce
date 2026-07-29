@@ -21,15 +21,15 @@ class ProductFactory extends Factory
         return [
             'category_id' => Category::inRandomOrder()->first()->id,
 
-            'name' => fake()->words(3, true),
+            'name' => $this->faker->words(3, true),
 
-            'slug' => fake()->unique()->slug(),
+            'slug' => $this->faker->unique()->slug(),
 
-            'description' => fake()->paragraph(),
+            'description' => $this->faker->paragraph(),
 
-            'price' => fake()->randomFloat(2, 10, 500),
+            'price' => $this->faker->randomFloat(2, 10, 500),
 
-            'stock' => fake()->numberBetween(0, 100),
+            'stock' => $this->faker->numberBetween(0, 100),
 
             'image' => null,
 

@@ -27,9 +27,9 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => User::inRandomOrder()->first()->id,
-            'total' => fake()->randomFloat(2, 30, 800),
+            'total' => $this->faker->randomFloat(2, 30, 800),
             'payment_method' => 'cash_on_delivery',
-            'status' => fake()->randomElement([
+            'status' => $this->faker->randomElement([
                 'pending',
                 'processing',
                 'shipped',

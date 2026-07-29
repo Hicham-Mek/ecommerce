@@ -19,9 +19,9 @@ class CategoryFactory extends Factory
     {
         return [
 
-            'name' => fake()->unique()->word(),
+            'name' => $this->faker->unique()->word(),
 
-            'slug' => fake()->unique()->slug(),
+            'slug' => $this->faker->unique()->slug(),
 
             'is_active' => true,
 
