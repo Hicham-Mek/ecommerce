@@ -50,7 +50,7 @@ const CategoriesSection = () => {
     if (category.image) {
       return category.image.startsWith("http")
         ? category.image
-        : `${import.meta.env.VITE_API_URL}/storage/${category.image}`;
+        : `https://ecommerce-nx2k.onrender.com/storage/${category.image}`;
     }
 
     return localMap[category.name.toLowerCase()] || "/electronics.jpg";

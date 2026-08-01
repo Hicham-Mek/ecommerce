@@ -50,7 +50,7 @@ const EditProduct = () => {
 
         if (product.image) {
           setPreview(
-            `${import.meta.env.VITE_API_URL}/storage/${product.image}`,
+            `https://ecommerce-nx2k.onrender.com/storage/${product.image}`,
           );
         }
       } catch (err) {
