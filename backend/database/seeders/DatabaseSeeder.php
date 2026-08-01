@@ -76,7 +76,7 @@ class DatabaseSeeder extends Seeder
                 'category_id' => $category->id,
                 'name' => $item['title'] ?? 'Product',
                 'slug' => Str::slug($item['title'] ?? 'product'),
-                'description' => $item['description'] ?? fake()->paragraph(),
+                'description' => $item['description'] ?? 'Product description',
                 'price' => (float) ($item['price'] ?? 0),
                 'stock' => rand(1, 100),
                 'image' => $item['image'] ?? null,
