@@ -5,7 +5,6 @@ import { useAuth } from "../context/AuthContext";
 const Register = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
-  
 
   const [formData, setFormData] = useState({
     name: "",
@@ -45,7 +44,7 @@ const Register = () => {
       if (error.response?.status === 422) {
         setErrors(error.response.data.errors);
       } else {
-        alert(error.response?.data?.message || "Something went wrong.");
+        alert(JSON.stringify(error.response?.data, null, 2) || error.message);
       }
     } finally {
       setLoading(false);
@@ -69,9 +68,7 @@ const Register = () => {
           />
 
           {errors.name && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.name[0]}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.name[0]}</p>
           )}
         </div>
 
@@ -87,9 +84,7 @@ const Register = () => {
           />
 
           {errors.email && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.email[0]}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.email[0]}</p>
           )}
         </div>
 
@@ -105,9 +100,7 @@ const Register = () => {
           />
 
           {errors.password && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.password[0]}
-            </p>
+            <p className="text-red-500 text-sm mt-1">{errors.password[0]}</p>
           )}
         </div>
 
