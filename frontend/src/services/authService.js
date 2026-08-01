@@ -2,7 +2,7 @@ import axios from "axios";
 import api from "../api/axios";
 
 const getCsrfCookie = async () => {
-  await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+  await axios.get(import.meta.env.VITE_API_URL + "/sanctum/csrf-cookie", {
     withCredentials: true,
   });
 };

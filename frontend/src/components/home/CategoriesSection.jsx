@@ -50,7 +50,7 @@ const CategoriesSection = () => {
     if (category.image) {
       return category.image.startsWith("http")
         ? category.image
-        : `http://localhost:8000/storage/${category.image}`;
+        : `${import.meta.env.VITE_API_URL}/storage/${category.image}`;
     }
 
     return localMap[category.name.toLowerCase()] || "/electronics.jpg";

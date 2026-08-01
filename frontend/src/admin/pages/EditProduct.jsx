@@ -49,7 +49,9 @@ const EditProduct = () => {
         });
 
         if (product.image) {
-          setPreview(`http://localhost:8000/storage/${product.image}`);
+          setPreview(
+            `${import.meta.env.VITE_API_URL}/storage/${product.image}`,
+          );
         }
       } catch (err) {
         console.error(err);
