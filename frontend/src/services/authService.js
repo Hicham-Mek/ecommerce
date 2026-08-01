@@ -1,8 +1,12 @@
 import axios from "axios";
 import api from "../api/axios";
 
+const apiBaseUrl =
+  import.meta.env.VITE_API_URL?.replace(/\/api\/?$/, "") ||
+  "https://ecommerce-nx2k.onrender.com";
+
 const getCsrfCookie = async () => {
-  await axios.get("https://ecommerce-nx2k.onrender.com/sanctum/csrf-cookie", {
+  await axios.get(`${apiBaseUrl}/sanctum/csrf-cookie`, {
     withCredentials: true,
   });
 };

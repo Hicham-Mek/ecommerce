@@ -21,9 +21,7 @@ return [
         'sanctum/csrf-cookie',
     ],
 
-    'allowed_origins' => [
-        'https://ecommerce-chi-orcin.vercel.app',
-    ],
+    'allowed_origins' => array_values(array_filter(explode(',', env('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173,https://ecommerce-chi-orcin.vercel.app,https://ecommerce-nx2k.onrender.com')))),
 
     'allowed_methods' => ['*'],
     'allowed_headers' => ['*'],
