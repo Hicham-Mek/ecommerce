@@ -7,3 +7,11 @@ Route::get('/', function () {
         'status' => 200
     ]);
 });
+
+Route::get('/session-test', function () {
+    session(['test' => 'ok']);
+
+    return response()->json([
+        'session' => session('test'),
+    ]);
+});
