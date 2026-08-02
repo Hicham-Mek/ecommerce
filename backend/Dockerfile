@@ -22,9 +22,6 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
-RUN cp .env.example .env || true
-
-RUN php artisan key:generate || true
 
 RUN chown -R www-data:www-data storage bootstrap/cache
 
