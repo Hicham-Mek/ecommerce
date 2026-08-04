@@ -8,18 +8,18 @@ import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <WishlistProvider>
-          <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
+        <CartProvider>
+          <WishlistProvider>
             <Layout>
               <AppRoutes />
             </Layout>
             <Toaster position="top-right" />
-          </BrowserRouter>
-        </WishlistProvider>
-      </CartProvider>
-    </AuthProvider>
+          </WishlistProvider>
+        </CartProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

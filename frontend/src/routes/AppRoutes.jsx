@@ -12,6 +12,7 @@ import Profile from "../pages/Profile";
 import NotFound from "../pages/NotFound";
 import OrderDetails from "../pages/OrderDetails";
 import AdminRoute from "./AdminRoute";
+import ProtectedRoute from "./ProtectedRoute";
 import AdminLayout from "../admin/layouts/AdminLayout";
 import Dashboard from "../admin/pages/Dashboard";
 import AdminProducts from "../admin/pages/Products";
@@ -31,12 +32,54 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/products" element={<Products />} />
       <Route path="/products/:id" element={<ProductDetails />} />
-      <Route path="/cart" element={<Cart />} />
-      <Route path="/wishlist" element={<Wishlist />} />
-      <Route path="/checkout" element={<Checkout />} />
-      <Route path="/orders" element={<Orders />} />
-      <Route path="/orders/:id" element={<OrderDetails />} />
-      <Route path="/profile" element={<Profile />} />
+      <Route
+        path="/cart"
+        element={
+          <ProtectedRoute>
+            <Cart />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/wishlist"
+        element={
+          <ProtectedRoute>
+            <Wishlist />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <Checkout />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/orders"
+        element={
+          <ProtectedRoute>
+            <Orders />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/orders/:id"
+        element={
+          <ProtectedRoute>
+            <OrderDetails />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        }
+      />
       <Route path="*" element={<NotFound />} />
       <Route
         path="/admin"
