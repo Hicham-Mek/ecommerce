@@ -6,16 +6,18 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
     public function register(RegisterRequest $request)
     {
+        $data = $request->validated();
+
         $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => $request->password, // Assumes the User model hashes passwords automatically.
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $data['password'],
             'role' => 'customer',
         ]);
 
@@ -32,16 +34,15 @@ class AuthController extends Controller
     {
         $credentials = $request->validated();
 
-        if (!Auth::attempt($credentials)) {
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (!$user || !Hash::check($credentials['password'], $user->password)) {
             return response()->json([
                 'message' => 'Invalid credentials.',
             ], 401);
         }
 
-        /** @var \App\Models\User $user */
-        $user = Auth::user();
-
-        // Optional: keep only one active token per user
+        // Optional: keep only one active token per user.
         $user->tokens()->delete();
 
         $token = $user->createToken('auth-token')->plainTextToken;
@@ -50,12 +51,14 @@ class AuthController extends Controller
             'message' => 'Login successful.',
             'token' => $token,
             'user' => $user,
-        ]);
+        ], 200);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        if ($token = $request->user()?->currentAccessToken()) {
+            $token->delete();
+        }
 
         return response()->json([
             'message' => 'Logout successful.',
