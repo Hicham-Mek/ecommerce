@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import EmptyState from "../components/common/EmptyState";
 import Spinner from "../components/common/Spinner";
+import Badge from "../components/common/Badge";
 import orderService from "../services/orderService";
 import { Package, ChevronRight, Calendar, DollarSign } from "lucide-react";
 
@@ -44,20 +45,6 @@ const Orders = () => {
     );
   }
 
-  const getStatusBadge = (status) => {
-    switch (status.toLowerCase()) {
-      case "completed":
-      case "delivered":
-        return <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-green-100 text-green-700 border border-green-200">{status}</span>;
-      case "processing":
-        return <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-700 border border-blue-200">{status}</span>;
-      case "cancelled":
-        return <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-red-100 text-red-700 border border-red-200">{status}</span>;
-      default:
-        return <span className="px-2.5 py-1 text-xs font-bold rounded-full bg-orange-100 text-orange-700 border border-orange-200">{status}</span>;
-    }
-  };
-
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
       <div className="flex items-center gap-3 mb-10">
@@ -72,7 +59,7 @@ const Orders = () => {
           <Link
             key={order.id}
             to={`/orders/${order.id}`}
-            className="block bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-6 hover:shadow-md hover:border-[var(--color-primary-300)] transition-all duration-300 group"
+            className="block bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl p-6 hover:shadow-md hover:border-[var(--color-primary-300)] transition-all duration-300 group"
           >
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
@@ -94,7 +81,7 @@ const Orders = () => {
               </div>
 
               <div className="flex items-center justify-between w-full sm:w-auto gap-4">
-                {getStatusBadge(order.status)}
+                <Badge status={order.status} />
                 
                 <div className="p-2 rounded-full bg-[var(--bg-main)] group-hover:bg-[var(--color-primary-50)] text-[var(--text-muted)] group-hover:text-[var(--color-primary-600)] transition-colors">
                   <ChevronRight size={18} />

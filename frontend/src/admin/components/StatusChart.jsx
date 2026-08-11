@@ -1,28 +1,37 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-const COLORS = ["#2563eb", "#16a34a", "#dc2626", "#f59e0b", "#7c3aed"];
+const COLORS = ["var(--color-primary-600)", "#10b981", "#ef4444", "#f59e0b", "#8b5cf6", "#64748b"];
 
 const StatusChart = ({ data }) => (
-  <div className="bg-white rounded-xl shadow p-6">
-    <h2 className="text-xl font-bold mb-4">Orders By Status</h2>
+  <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-sm p-6 flex flex-col h-full">
+    <h2 className="text-lg font-bold text-[var(--text-primary)] mb-6">Orders By Status</h2>
 
-    <ResponsiveContainer width="100%" height={300}>
-      <PieChart>
-        <Pie
-          data={data}
-          dataKey="total"
-          nameKey="status"
-          outerRadius={110}
-          label
-        >
-          {data.map((entry, index) => (
-            <Cell key={index} fill={COLORS[index % COLORS.length]} />
-          ))}
-        </Pie>
+    <div className="flex-1 w-full min-h-[300px]">
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={data}
+            dataKey="total"
+            nameKey="status"
+            cx="50%"
+            cy="50%"
+            innerRadius={60}
+            outerRadius={100}
+            paddingAngle={2}
+            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+            labelLine={false}
+          >
+            {data.map((entry, index) => (
+              <Cell key={index} fill={COLORS[index % COLORS.length]} className="stroke-[var(--bg-surface)] stroke-2 outline-none" />
+            ))}
+          </Pie>
 
-        <Tooltip />
-      </PieChart>
-    </ResponsiveContainer>
+          <Tooltip 
+            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
+    </div>
   </div>
 );
 

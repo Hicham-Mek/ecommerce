@@ -12,7 +12,16 @@ const CategoriesSection = () => {
       try {
         const res = await api.get("/categories");
 
-        setCategories(res.data.data || res.data);
+        const raw = res.data.data || res.data;
+        const active = raw.filter(
+          (cat) =>
+            cat.is_active === undefined ||
+            cat.is_active === null ||
+            Number(cat.is_active) === 1 ||
+            cat.is_active === true,
+        );
+
+        setCategories(active);
       } catch (error) {
         console.error(error);
       } finally {

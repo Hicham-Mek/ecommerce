@@ -1,4 +1,4 @@
-import { Menu } from "lucide-react";
+import { LayoutDashboard, Package, FolderTree, ShoppingBag, Users, Store, LogOut, Menu } from "lucide-react";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
@@ -6,54 +6,69 @@ const Sidebar = () => {
   const { logout } = useAuth();
 
   const linkClass = ({ isActive }) =>
-    `block rounded px-4 py-2 transition ${
-      isActive ? "bg-blue-600 text-white" : "text-gray-700 hover:bg-gray-200"
+    `flex items-center gap-3 rounded-lg px-4 py-2.5 transition-colors font-medium ${
+      isActive
+        ? "bg-[var(--color-primary-50)] text-[var(--color-primary-700)]"
+        : "text-[var(--text-secondary)] hover:bg-[var(--bg-main)] hover:text-[var(--text-primary)]"
     }`;
 
   return (
-    <aside className="w-full lg:w-64 bg-white border-r min-h-screen p-4 flex flex-col">
-      <div className="flex items-center justify-between lg:justify-start mb-8">
-        <div className="text-2xl font-bold text-blue-600">Admin Panel</div>
-        <div className="lg:hidden rounded p-2 text-gray-600">
+    <aside className="w-full bg-[var(--bg-surface)] border-r border-[var(--border-subtle)] min-h-screen p-5 flex flex-col shadow-[1px_0_10px_rgba(0,0,0,0.02)]">
+      <div className="flex items-center justify-between lg:justify-start mb-8 pl-2">
+        <div className="text-2xl font-bold tracking-tight text-[var(--text-primary)]">
+          Store<span className="text-[var(--color-primary-600)]">Admin</span>
+        </div>
+        <div className="lg:hidden rounded p-2 text-[var(--text-secondary)] cursor-pointer">
           <Menu size={20} />
         </div>
       </div>
 
-      <nav className="space-y-2 flex-1">
+      <nav className="space-y-1 flex-1">
+        <div className="px-3 mb-2 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
+          Main Menu
+        </div>
+        
         <NavLink to="/admin" end className={linkClass}>
-          Dashboard
+          <LayoutDashboard size={20} />
+          <span>Dashboard</span>
         </NavLink>
 
         <NavLink to="/admin/products" className={linkClass}>
-          Products
+          <Package size={20} />
+          <span>Products</span>
         </NavLink>
 
         <NavLink to="/admin/categories" className={linkClass}>
-          Categories
+          <FolderTree size={20} />
+          <span>Categories</span>
         </NavLink>
 
         <NavLink to="/admin/orders" className={linkClass}>
-          Orders
+          <ShoppingBag size={20} />
+          <span>Orders</span>
         </NavLink>
 
         <NavLink to="/admin/users" className={linkClass}>
-          Users
+          <Users size={20} />
+          <span>Users</span>
         </NavLink>
       </nav>
 
-      <div className="pt-4 border-t space-y-2">
+      <div className="pt-6 border-t border-[var(--border-subtle)] space-y-2">
         <Link
           to="/"
-          className="block rounded px-4 py-2 text-gray-700 hover:bg-gray-200"
+          className="flex items-center gap-3 rounded-lg px-4 py-2.5 text-[var(--text-secondary)] hover:bg-[var(--bg-main)] hover:text-[var(--text-primary)] transition-colors font-medium"
         >
-          Back to Store
+          <Store size={20} />
+          <span>Back to Store</span>
         </Link>
 
         <button
           onClick={logout}
-          className="w-full rounded px-4 py-2 text-left text-red-600 hover:bg-red-50"
+          className="w-full flex items-center gap-3 rounded-lg px-4 py-2.5 text-left text-[var(--status-error)] hover:bg-red-50 transition-colors font-medium"
         >
-          Logout
+          <LogOut size={20} />
+          <span>Logout</span>
         </button>
       </div>
     </aside>

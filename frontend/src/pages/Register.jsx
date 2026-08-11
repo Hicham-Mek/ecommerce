@@ -1,6 +1,8 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import Input from "../components/common/Input";
+import Button from "../components/common/Button";
 
 const Register = () => {
   const { register } = useAuth();
@@ -23,13 +25,11 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
 
-    // Remove field error while typing
     setErrors((prev) => ({
       ...prev,
       [e.target.name]: null,
     }));
 
-    // Remove general error
     setServerError("");
   };
 
@@ -50,7 +50,7 @@ const Register = () => {
       });
     } catch (error) {
       if (error.response?.status === 422) {
-        setErrors(error.response.data.errors);
+        setErrors(error.response.data.errors || {});
       } else {
         setServerError(
           error.response?.data?.message ||
@@ -63,107 +63,81 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-12 bg-white shadow-lg rounded-lg p-8">
-      <h1 className="text-3xl font-bold text-center mb-6">Register</h1>
-
-      {serverError && (
-        <div className="mb-4 rounded-md border border-red-300 bg-red-50 p-3 text-red-700">
-          {serverError}
+    <div className="min-h-[calc(100vh-80px)] bg-[var(--bg-main)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full bg-[var(--bg-surface)] border border-[var(--border-subtle)] shadow-sm rounded-2xl p-8 space-y-6">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] tracking-tight">Create Account</h1>
+          <p className="text-[var(--text-secondary)] mt-2 text-sm">Join ShopHub for a seamless shopping experience</p>
         </div>
-      )}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Name */}
-        <div>
-          <input
-            type="text"
+        {serverError && (
+          <div className="rounded-xl bg-red-50 text-red-700 p-4 border border-red-200 text-sm font-medium">
+            {serverError}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <Input
+            label="Full Name"
             name="name"
-            placeholder="Name"
+            type="text"
+            placeholder="John Doe"
             value={formData.name}
             onChange={handleChange}
-            className={`w-full rounded-md border p-3 ${
-              errors.name ? "border-red-500" : "border-gray-300"
-            }`}
+            error={errors.name ? errors.name[0] : null}
+            required
           />
 
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-500">{errors.name[0]}</p>
-          )}
-        </div>
-
-        {/* Email */}
-        <div>
-          <input
-            type="email"
+          <Input
+            label="Email Address"
             name="email"
-            placeholder="Email"
+            type="email"
+            placeholder="you@example.com"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full rounded-md border p-3 ${
-              errors.email ? "border-red-500" : "border-gray-300"
-            }`}
+            error={errors.email ? errors.email[0] : null}
+            required
           />
 
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email[0]}</p>
-          )}
-        </div>
-
-        {/* Password */}
-        <div>
-          <input
-            type="password"
+          <Input
+            label="Password"
             name="password"
-            placeholder="Password"
+            type="password"
+            placeholder="••••••••"
             value={formData.password}
             onChange={handleChange}
-            className={`w-full rounded-md border p-3 ${
-              errors.password ? "border-red-500" : "border-gray-300"
-            }`}
+            error={errors.password ? errors.password[0] : null}
+            required
           />
 
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-500">{errors.password[0]}</p>
-          )}
-        </div>
-
-        {/* Password Confirmation */}
-        <div>
-          <input
-            type="password"
+          <Input
+            label="Confirm Password"
             name="password_confirmation"
-            placeholder="Confirm Password"
+            type="password"
+            placeholder="••••••••"
             value={formData.password_confirmation}
             onChange={handleChange}
-            className={`w-full rounded-md border p-3 ${
-              errors.password_confirmation
-                ? "border-red-500"
-                : "border-gray-300"
-            }`}
+            error={errors.password_confirmation ? errors.password_confirmation[0] : null}
+            required
           />
 
-          {errors.password_confirmation && (
-            <p className="mt-1 text-sm text-red-500">
-              {errors.password_confirmation[0]}
-            </p>
-          )}
-        </div>
+          <Button
+            type="submit"
+            variant="primary"
+            className="w-full mt-2"
+            disabled={loading}
+          >
+            {loading ? "Registering..." : "Create Account"}
+          </Button>
+        </form>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-blue-600 py-3 text-white transition hover:bg-blue-700 disabled:bg-gray-400"
-        >
-          {loading ? "Registering..." : "Register"}
-        </button>
-      </form>
-
-      <p className="mt-6 text-center">
-        Already have an account?{" "}
-        <Link to="/login" className="text-blue-600 hover:underline">
-          Login
-        </Link>
-      </p>
+        <p className="text-center text-sm text-[var(--text-secondary)] pt-2">
+          Already have an account?{" "}
+          <Link to="/login" className="text-[var(--color-primary-600)] font-semibold hover:underline">
+            Sign In
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

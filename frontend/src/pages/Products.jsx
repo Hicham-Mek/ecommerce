@@ -35,7 +35,15 @@ const Products = () => {
     const fetchCategories = async () => {
       try {
         const response = await api.get("/categories");
-        setCategories(response.data.data);
+        const raw = response.data.data || response.data;
+        const active = raw.filter(
+          (cat) =>
+            cat.is_active === undefined ||
+            cat.is_active === null ||
+            Number(cat.is_active) === 1 ||
+            cat.is_active === true,
+        );
+        setCategories(active);
       } catch (error) {
         console.error(error);
       }

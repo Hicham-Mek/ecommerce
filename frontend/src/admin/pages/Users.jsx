@@ -1,7 +1,11 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import { Trash2 } from "lucide-react";
 import Spinner from "../../components/common/Spinner";
+import EmptyState from "../../components/common/EmptyState";
+import Input from "../../components/common/Input";
+import Button from "../../components/common/Button";
 import adminUserService from "../../services/adminUserService";
 
 const Users = () => {
@@ -61,9 +65,9 @@ const Users = () => {
       buttonsStyling: false,
       customClass: {
         confirmButton:
-          "bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded",
+          "bg-red-600 hover:bg-red-700 text-white font-medium px-4 py-2 rounded-lg transition-colors",
         cancelButton:
-          "bg-gray-500 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded ml-2",
+          "bg-gray-500 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded-lg transition-colors ml-3",
       },
     });
 
@@ -81,108 +85,119 @@ const Users = () => {
     }
   };
 
-  if (loading) {
-    return <Spinner />;
+  if (loading && users.length === 0) {
+    return (
+      <div className="py-24">
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
   return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Users</h1>
+    <div className="max-w-7xl mx-auto space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight">Users</h1>
+          <p className="text-[var(--text-secondary)] mt-1">Manage customers and admin accounts.</p>
+        </div>
 
-        <input
-          type="text"
-          placeholder="Search users..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border rounded-lg px-4 py-2 w-72"
-        />
+        <div className="w-full sm:w-72">
+          <Input
+            type="text"
+            placeholder="Search users..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow overflow-hidden">
-        <table className="w-full">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="text-left p-3">Name</th>
-
-              <th className="text-left p-3">Email</th>
-
-              <th className="text-left p-3">Role</th>
-
-              <th className="text-left p-3">Joined</th>
-
-              <th className="text-left p-3">Actions</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {users.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="text-center p-6">
-                  No users found.
-                </td>
-              </tr>
-            ) : (
-              users.map((user) => (
-                <tr key={user.id} className="border-t hover:bg-gray-50">
-                  <td className="p-3">{user.name}</td>
-
-                  <td className="p-3">{user.email}</td>
-
-                  <td className="p-3">
-                    <select
-                      value={user.role}
-                      onChange={(e) =>
-                        handleRoleChange(user.id, e.target.value)
-                      }
-                      className="border rounded px-2 py-1"
-                    >
-                      <option value="customer">Customer</option>
-
-                      <option value="admin">Admin</option>
-                    </select>
-                  </td>
-
-                  <td className="p-3">
-                    {new Date(user.created_at).toLocaleDateString()}
-                  </td>
-
-                  <td className="p-3">
-                    <button
-                      onClick={() => handleDelete(user.id)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Delete
-                    </button>
-                  </td>
+      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-sm overflow-hidden relative">
+        {loading && (
+          <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center">
+            <Spinner />
+          </div>
+        )}
+        
+        {users.length === 0 && !loading ? (
+          <div className="py-12">
+            <EmptyState 
+              title="No users found" 
+              description={search ? "Try adjusting your search query." : "No users exist in the system yet."}
+            />
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-main)] border-b border-[var(--border-subtle)]">
+                <tr>
+                  <th className="px-6 py-4 font-semibold tracking-wider">Name</th>
+                  <th className="px-6 py-4 font-semibold tracking-wider">Email</th>
+                  <th className="px-6 py-4 font-semibold tracking-wider">Role</th>
+                  <th className="px-6 py-4 font-semibold tracking-wider">Joined</th>
+                  <th className="px-6 py-4 font-semibold tracking-wider text-right">Actions</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+
+              <tbody className="divide-y divide-[var(--border-subtle)]">
+                {users.map((user) => (
+                  <tr key={user.id} className="hover:bg-[var(--bg-main)] transition-colors group">
+                    <td className="px-6 py-4 font-medium text-[var(--text-primary)]">{user.name}</td>
+                    <td className="px-6 py-4 text-[var(--text-secondary)]">{user.email}</td>
+                    <td className="px-6 py-4">
+                      <select
+                        value={user.role}
+                        onChange={(e) =>
+                          handleRoleChange(user.id, e.target.value)
+                        }
+                        className="bg-[var(--bg-main)] border border-[var(--border-subtle)] text-[var(--text-primary)] text-sm rounded-md focus:ring-[var(--border-focus)] focus:border-[var(--border-focus)] block p-2 transition-colors cursor-pointer"
+                      >
+                        <option value="customer">Customer</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </td>
+                    <td className="px-6 py-4 text-[var(--text-secondary)] whitespace-nowrap">
+                      {new Date(user.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="px-6 py-4 text-right">
+                      <button
+                        onClick={() => handleDelete(user.id)}
+                        className="inline-flex items-center justify-center p-2 rounded-lg text-[var(--status-error)] hover:bg-red-50 transition-colors"
+                        title="Delete User"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
 
-      <div className="flex justify-center items-center gap-4 mt-6">
-        <button
-          onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
-          disabled={page === 1}
-          className="px-4 py-2 border rounded disabled:opacity-50"
-        >
-          Previous
-        </button>
+      {lastPage > 1 && (
+        <div className="flex justify-center items-center gap-6 mt-8 pt-4">
+          <Button
+            variant="outline"
+            onClick={() => setPage((prev) => Math.max(prev - 1, 1))}
+            disabled={page === 1}
+          >
+            Previous
+          </Button>
 
-        <span className="font-medium">
-          Page {page} of {lastPage}
-        </span>
+          <span className="text-[var(--text-secondary)] font-medium text-sm">
+            Page {page} of {lastPage}
+          </span>
 
-        <button
-          onClick={() => setPage((prev) => Math.min(prev + 1, lastPage))}
-          disabled={page === lastPage}
-          className="px-4 py-2 border rounded disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
+          <Button
+            variant="outline"
+            onClick={() => setPage((prev) => Math.min(prev + 1, lastPage))}
+            disabled={page === lastPage}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

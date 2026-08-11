@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import Spinner from "../../components/common/Spinner";
+import Badge from "../../components/common/Badge";
 import dashboardService from "../../services/adminDashboardService";
 import StatCard from "../components/StatCard";
 import RevenueChart from "../components/RevenueChart";
 import StatusChart from "../components/StatusChart";
+import { Users, Package, FolderTree, ShoppingBag, DollarSign } from "lucide-react";
 
 const Dashboard = () => {
   const [statistics, setStatistics] = useState(null);
@@ -38,95 +40,93 @@ const Dashboard = () => {
   }, []);
 
   if (loading) {
-    return <Spinner />;
+    return (
+      <div className="py-24">
+        <Spinner size="lg" />
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8">
       <div>
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-
-        <p className="text-gray-500 mt-2">Welcome to your admin dashboard.</p>
+        <h1 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] tracking-tight">Dashboard Overview</h1>
+        <p className="text-[var(--text-secondary)] mt-1">Here's what's happening with your store today.</p>
       </div>
 
       {/* Statistics */}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
-        <StatCard title="Users" value={statistics.users} />
-
-        <StatCard title="Products" value={statistics.products} />
-
-        <StatCard title="Categories" value={statistics.categories} />
-
-        <StatCard title="Orders" value={statistics.orders} />
-
-        <StatCard
-          title="Revenue"
-          value={`$${Number(statistics.revenue).toFixed(2)}`}
-        />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 lg:gap-6">
+        <StatCard title="Total Revenue" value={`$${Number(statistics.revenue).toFixed(2)}`} icon={DollarSign} />
+        <StatCard title="Orders" value={statistics.orders} icon={ShoppingBag} />
+        <StatCard title="Products" value={statistics.products} icon={Package} />
+        <StatCard title="Categories" value={statistics.categories} icon={FolderTree} />
+        <StatCard title="Users" value={statistics.users} icon={Users} />
       </div>
-      <div className="grid lg:grid-cols-2 gap-6">
-        <RevenueChart data={monthlyRevenue} />
 
+      <div className="grid lg:grid-cols-2 gap-4 lg:gap-6">
+        <RevenueChart data={monthlyRevenue} />
         <StatusChart data={ordersByStatus} />
       </div>
-      {/* Latest Orders */}
 
-      <div className="bg-white rounded-xl shadow">
-        <div className="border-b px-6 py-4">
-          <h2 className="text-xl font-semibold">Latest Orders</h2>
+      {/* Latest Orders */}
+      <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-sm overflow-hidden">
+        <div className="border-b border-[var(--border-subtle)] px-6 py-5 bg-[var(--bg-main)]">
+          <h2 className="text-lg font-bold text-[var(--text-primary)]">Latest Orders</h2>
         </div>
 
-        <table className="w-full">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="text-left p-4">#</th>
-
-              <th className="text-left p-4">Customer</th>
-
-              <th className="text-left p-4">Total</th>
-
-              <th className="text-left p-4">Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {latestOrders.map((order) => (
-              <tr key={order.id} className="border-t">
-                <td className="p-4">#{order.id}</td>
-
-                <td className="p-4">{order.user?.name}</td>
-
-                <td className="p-4">${Number(order.total).toFixed(2)}</td>
-
-                <td className="p-4 capitalize">{order.status}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm text-left">
+            <thead className="text-xs text-[var(--text-muted)] uppercase bg-[var(--bg-main)] border-b border-[var(--border-subtle)]">
+              <tr>
+                <th className="px-6 py-4 font-semibold tracking-wider">Order ID</th>
+                <th className="px-6 py-4 font-semibold tracking-wider">Customer</th>
+                <th className="px-6 py-4 font-semibold tracking-wider">Total</th>
+                <th className="px-6 py-4 font-semibold tracking-wider">Status</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y divide-[var(--border-subtle)]">
+              {latestOrders.map((order) => (
+                <tr key={order.id} className="hover:bg-[var(--bg-main)] transition-colors">
+                  <td className="px-6 py-4 font-medium text-[var(--text-primary)]">
+                    #{order.id.toString().padStart(6, '0')}
+                  </td>
+                  <td className="px-6 py-4 text-[var(--text-secondary)]">{order.user?.name}</td>
+                  <td className="px-6 py-4 font-medium text-[var(--text-primary)]">
+                    ${Number(order.total).toFixed(2)}
+                  </td>
+                  <td className="px-6 py-4">
+                    <Badge status={order.status} />
+                  </td>
+                </tr>
+              ))}
+              {latestOrders.length === 0 && (
+                <tr>
+                  <td colSpan="4" className="px-6 py-8 text-center text-[var(--text-muted)]">
+                    No recent orders found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Bottom */}
-
-      <div className="grid lg:grid-cols-2 gap-6">
+      {/* Bottom Section */}
+      <div className="grid lg:grid-cols-2 gap-4 lg:gap-6 pb-10">
         {/* Low Stock */}
-
-        <div className="bg-white rounded-xl shadow">
-          <div className="border-b px-6 py-4">
-            <h2 className="text-xl font-semibold">Low Stock Products</h2>
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-sm overflow-hidden">
+          <div className="border-b border-[var(--border-subtle)] px-6 py-5 bg-[var(--bg-main)] flex justify-between items-center">
+            <h2 className="text-lg font-bold text-[var(--text-primary)]">Low Stock Alerts</h2>
           </div>
 
-          <div className="divide-y">
+          <div className="divide-y divide-[var(--border-subtle)]">
             {lowStockProducts.length === 0 ? (
-              <p className="p-6 text-gray-500">No low stock products.</p>
+              <p className="p-6 text-center text-[var(--text-muted)]">No low stock products.</p>
             ) : (
               lowStockProducts.map((product) => (
-                <div key={product.id} className="flex justify-between p-4">
-                  <span>{product.name}</span>
-
-                  <span className="font-semibold text-red-600">
-                    {product.stock}
-                  </span>
+                <div key={product.id} className="flex justify-between items-center p-4 sm:px-6 hover:bg-[var(--bg-main)] transition-colors">
+                  <span className="font-medium text-[var(--text-primary)] truncate pr-4">{product.name}</span>
+                  <Badge variant="danger">{product.stock} left</Badge>
                 </div>
               ))
             )}
@@ -134,25 +134,22 @@ const Dashboard = () => {
         </div>
 
         {/* Recent Users */}
-
-        <div className="bg-white rounded-xl shadow">
-          <div className="border-b px-6 py-4">
-            <h2 className="text-xl font-semibold">Recent Users</h2>
+        <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl shadow-sm overflow-hidden">
+          <div className="border-b border-[var(--border-subtle)] px-6 py-5 bg-[var(--bg-main)]">
+            <h2 className="text-lg font-bold text-[var(--text-primary)]">Recent Users</h2>
           </div>
 
-          <div className="divide-y">
+          <div className="divide-y divide-[var(--border-subtle)]">
             {recentUsers.length === 0 ? (
-              <p className="p-6 text-gray-500">No users found.</p>
+              <p className="p-6 text-center text-[var(--text-muted)]">No users found.</p>
             ) : (
               recentUsers.map((user) => (
-                <div key={user.id} className="flex justify-between p-4">
-                  <div>
-                    <p className="font-semibold">{user.name}</p>
-
-                    <p className="text-sm text-gray-500">{user.email}</p>
+                <div key={user.id} className="flex justify-between items-center p-4 sm:px-6 hover:bg-[var(--bg-main)] transition-colors">
+                  <div className="flex flex-col truncate pr-4">
+                    <p className="font-medium text-[var(--text-primary)] truncate">{user.name}</p>
+                    <p className="text-sm text-[var(--text-muted)] truncate">{user.email}</p>
                   </div>
-
-                  <span className="capitalize">{user.role}</span>
+                  <Badge variant={user.role === 'admin' ? 'indigo' : 'default'}>{user.role}</Badge>
                 </div>
               ))
             )}

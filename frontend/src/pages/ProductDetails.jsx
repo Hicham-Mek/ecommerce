@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Heart, ShoppingCart, Tag, Package } from "lucide-react";
 import toast from "react-hot-toast";
@@ -174,8 +174,12 @@ const ProductDetails = () => {
                   Please sign in to add this product to your cart or wishlist.
                 </p>
                 <div className="flex justify-center gap-4">
-                  <Button variant="outline" onClick={() => window.location.href = '/login'}>Sign In</Button>
-                  <Button variant="primary" onClick={() => window.location.href = '/register'}>Create Account</Button>
+                  <Link to="/login">
+                    <Button variant="outline">Sign In</Button>
+                  </Link>
+                  <Link to="/register">
+                    <Button variant="primary">Create Account</Button>
+                  </Link>
                 </div>
               </div>
             )}
