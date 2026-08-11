@@ -25,12 +25,13 @@ const benefits = [
 
 const Benefits = () => {
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold">Why Shop With Us?</h2>
-
-          <p className="text-gray-500 mt-3">
+    <section className="py-24 bg-[var(--bg-surface)] border-y border-[var(--border-subtle)]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] tracking-tight">
+            Why Shop With Us?
+          </h2>
+          <p className="text-[var(--text-secondary)] mt-4 max-w-2xl mx-auto text-lg">
             We provide the best shopping experience for our customers.
           </p>
         </div>
@@ -42,15 +43,17 @@ const Benefits = () => {
             return (
               <div
                 key={index}
-                className="bg-white rounded-xl shadow hover:shadow-xl transition p-8 text-center"
+                className="bg-[var(--bg-main)] rounded-2xl p-8 text-center border border-[var(--border-subtle)] shadow-sm hover:shadow-md transition-shadow duration-300"
               >
-                <div className="w-16 h-16 mx-auto rounded-full bg-blue-100 flex items-center justify-center">
-                  <Icon className="text-blue-600" size={32} />
+                <div className="w-16 h-16 mx-auto rounded-full bg-teal-50 flex items-center justify-center mb-6">
+                  <Icon className="text-[var(--color-primary-600)]" size={32} />
                 </div>
-
-                <h3 className="mt-6 text-xl font-bold">{item.title}</h3>
-
-                <p className="text-gray-500 mt-3">{item.description}</p>
+                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-3">
+                  {item.title}
+                </h3>
+                <p className="text-[var(--text-secondary)] leading-relaxed">
+                  {item.description}
+                </p>
               </div>
             );
           })}

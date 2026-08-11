@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import { useCart } from "../../context/CartContext";
 import { useWishlist } from "../../context/WishlistContext";
 import { useAuth } from "../../context/AuthContext";
+import Button from "../common/Button";
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useCart();
@@ -12,7 +13,8 @@ const ProductCard = ({ product }) => {
   const { user } = useAuth();
   const wishItem = wishlist.find((item) => item.product_id === product.id);
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (e) => {
+    e.preventDefault(); // Prevent link navigation if inside a Link context
     try {
       await addToCart(product.id);
       toast.success("Added to cart");
@@ -22,7 +24,8 @@ const ProductCard = ({ product }) => {
     }
   };
 
-  const handleWishlistToggle = async () => {
+  const handleWishlistToggle = async (e) => {
+    e.preventDefault();
     try {
       if (wishItem) {
         await remove(wishItem.id);
@@ -38,52 +41,69 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="border rounded-lg p-4 shadow hover:shadow-lg transition">
-      <img
-        src={
-          product.image
-            ? product.image.startsWith("http")
-              ? product.image
-              : `http://127.0.0.1:8000/storage/${product.image}`
-            : "https://placehold.co/300x300?text=No+Image"
-        }
-        alt={product.name}
-        className="w-full h-56 object-cover rounded"
-      />
-
-      <h2 className="text-xl font-semibold mt-4">{product.name}</h2>
-
-      <p className="text-gray-500 mt-2 line-clamp-2">{product.description}</p>
-
-      <p className="text-blue-600 font-bold text-lg mt-3">
-        ${Number(product.price).toFixed(2)}
-      </p>
-
+    <div className="bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-xl p-5 hover:border-[var(--color-primary-400)] hover:shadow-md transition-all duration-300 flex flex-col h-full group relative">
+      {/* Wishlist Toggle Absolute (Premium UI pattern) */}
       {user && (
-        <div className="flex flex-wrap gap-2 mt-4">
-          <button
-            onClick={handleAddToCart}
-            className=" cursor-pointer inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded"
-          >
-            <ShoppingCart size={16} />
-            Add to Cart
-          </button>
-          <button
-            className=" cursor-pointer inline-flex items-center gap-2 text-red-500"
-            onClick={handleWishlistToggle}
-          >
-            <Heart size={16} fill={wishItem ? "currentColor" : "none"} />
-            {wishItem ? "Remove" : "Wishlist"}
-          </button>
-        </div>
+        <button
+          onClick={handleWishlistToggle}
+          className="absolute top-7 right-7 z-10 p-2 bg-white/80 backdrop-blur-sm rounded-full shadow-sm hover:bg-white text-[var(--text-secondary)] hover:text-red-500 transition-colors focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1"
+          title={wishItem ? "Remove from Wishlist" : "Add to Wishlist"}
+        >
+          <Heart size={18} fill={wishItem ? "#ef4444" : "none"} className={wishItem ? "text-red-500" : ""} />
+        </button>
       )}
-      <Link
-        to={`/products/${product.id}`}
-        className="inline-flex items-center gap-2 mt-4 bg-gray-100 text-gray-700 px-4 py-2 rounded hover:bg-gray-200"
-      >
-        <Eye size={16} />
-        View Details
+
+      <Link to={`/products/${product.id}`} className="block overflow-hidden rounded-lg mb-4 bg-[var(--bg-main)]">
+        <img
+          src={
+            product.image
+              ? product.image.startsWith("http")
+                ? product.image
+                : `http://127.0.0.1:8000/storage/${product.image}`
+              : "https://placehold.co/300x300?text=No+Image"
+          }
+          alt={product.name}
+          className="w-full aspect-[4/5] object-cover rounded-lg group-hover:scale-105 transition-transform duration-500 ease-out"
+        />
       </Link>
+
+      <div className="flex flex-col flex-grow">
+        <Link to={`/products/${product.id}`}>
+          <h2 className="text-lg font-semibold text-[var(--text-primary)] line-clamp-1 mb-1 group-hover:text-[var(--color-primary-600)] transition-colors">
+            {product.name}
+          </h2>
+        </Link>
+        <p className="text-sm text-[var(--text-secondary)] line-clamp-2 mb-4 flex-grow">
+          {product.description}
+        </p>
+
+        <div className="flex items-center justify-between mt-auto pt-4 border-t border-[var(--border-subtle)]">
+          <p className="text-xl font-bold text-[var(--text-primary)]">
+            ${Number(product.price).toFixed(2)}
+          </p>
+
+          <div className="flex gap-2">
+            {user ? (
+              <Button
+                variant="primary"
+                size="sm"
+                onClick={handleAddToCart}
+                className="gap-2 px-3 shadow-sm"
+                title="Add to Cart"
+              >
+                <ShoppingCart size={16} />
+                <span className="hidden sm:inline">Add</span>
+              </Button>
+            ) : (
+              <Link to={`/products/${product.id}`}>
+                <Button variant="outline" size="sm" className="gap-2 px-3">
+                  <Eye size={16} />
+                </Button>
+              </Link>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

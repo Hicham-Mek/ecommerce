@@ -28,33 +28,37 @@ const FeaturedProducts = () => {
 
   if (loading) {
     return (
-      <section className="py-20">
+      <section className="py-24 bg-[var(--bg-main)]">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <Spinner />{" "}
+          <Spinner size="lg" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="py-20">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex justify-between items-center mb-10">
+    <section className="py-24 bg-[var(--bg-main)]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        <div className="flex flex-col sm:flex-row justify-between items-end mb-12 gap-4">
           <div>
-            <h2 className="text-4xl font-bold">Featured Products</h2>
-
-            <p className="text-gray-500 mt-2">Discover our newest arrivals.</p>
+            <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] tracking-tight">
+              Featured Products
+            </h2>
+            <p className="text-[var(--text-secondary)] mt-3 text-lg">
+              Discover our newest arrivals.
+            </p>
           </div>
 
           <Link
             to="/products"
-            className="text-blue-600 font-semibold hover:underline"
+            className="text-[var(--color-primary-600)] font-medium hover:text-[var(--color-primary-700)] transition-colors inline-flex items-center gap-1 group"
           >
-            View All →
+            View All 
+            <span className="transform group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {products.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
