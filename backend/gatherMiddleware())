@@ -1,5 +1,0 @@
-
-Deprecated: Constant PDO::MYSQL_ATTR_SSL_CA is deprecated since 8.5, use Pdo\Mysql::ATTR_SSL_CA instead in C:\Users\mekid\Herd\ecommerce\backend\config\database.php on line 63
-
-Deprecated: Constant PDO::MYSQL_ATTR_SSL_CA is deprecated since 8.5, use Pdo\Mysql::ATTR_SSL_CA instead in C:\Users\mekid\Herd\ecommerce\backend\config\database.php on line 83
- PARSE ERROR PHP Parse error: Syntax error, unexpected ';' in vendor\psy\psysh\src\Exception\ParseErrorException.php on line 44.
