@@ -22,8 +22,12 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader
 
+# Create the storage symlink so uploaded images (public disk) are web-accessible
+RUN php artisan storage:link
 
-RUN chown -R www-data:www-data storage bootstrap/cache
+# Ensure storage and cache directories are writable by Apache at runtime
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
 
 RUN a2enmod rewrite
 
@@ -31,6 +35,8 @@ COPY apache.conf /etc/apache2/sites-available/000-default.conf
 
 EXPOSE 80
 
+# Migrations are idempotent (only new migrations run).
+# Seeding is intentionally omitted — run manually when needed:
+#   docker exec <container> php artisan db:seed --force
 CMD php artisan migrate --force && \
-    php artisan db:seed --force && \
     apache2-foreground
