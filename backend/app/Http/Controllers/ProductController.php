@@ -18,6 +18,10 @@ class ProductController extends Controller
     {
         $query = Product::with('category');
 
+        if (!$request->user() || $request->user()->role !== 'admin') {
+            $query->where('is_active', true);
+        }
+
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }

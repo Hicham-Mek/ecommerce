@@ -31,6 +31,9 @@ return new class extends Migration
 
         $table->boolean('is_active')->default(true);
 
+        $table->index('price');
+        $table->index('is_active');
+
         $table->timestamps();
     });
 }

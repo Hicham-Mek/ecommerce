@@ -14,8 +14,14 @@ class CategoryController extends Controller
      */
     public function index()
 {
+    $query = Category::query();
+    
+    if (!request()->user() || request()->user()->role !== 'admin') {
+        $query->where('is_active', true);
+    }
+
     return response()->json(
-        Category::latest()->paginate(10)
+        $query->latest()->paginate(10)
     );
 }
 
